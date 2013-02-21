@@ -1,5 +1,9 @@
 package com.andyhawkes.chronic;
 
+/**
+ * Time series that wraps and caches another one. It leaves a rolling period at
+ * the end of the series that is "mutable" and not subject to caching.
+ */
 public class CachingTimeSeries implements TimeSeries {
 	private TimeSeries cache;
 	private TimeSeries other;

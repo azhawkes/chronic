@@ -1,10 +1,10 @@
 package com.andyhawkes.chronic;
 
 /**
- * Time buffer that keeps a running total. The value at any given slot is the
+ * Time series that keeps a running total. The value at any given slot is the
  * total of all slots up to and including that slot.
  * 
- * This one is optimized for large amounts of data. It keeps a backup buffer at
+ * This one is optimized for large amounts of data. It keeps a backup series at
  * 1/10th the resolution, to avoid traversing a whole bunch of buckets. This
  * backup, in turn, might have a low-res backup of itself, and so on.
  */

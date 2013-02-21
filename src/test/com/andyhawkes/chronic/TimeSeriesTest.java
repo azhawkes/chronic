@@ -179,9 +179,9 @@ public class TimeSeriesTest {
 
 	@Test
 	public void testPercentileTimeBuffer() {
-		TimeSeries p50 = new PercentileTimeBuffer(1000, 50);
-		TimeSeries p80 = new PercentileTimeBuffer(1000, 80);
-		TimeSeries p90 = new PercentileTimeBuffer(1000, 90);
+		TimeSeries p50 = new PercentileTimeSeries(1000, 50);
+		TimeSeries p80 = new PercentileTimeSeries(1000, 80);
+		TimeSeries p90 = new PercentileTimeSeries(1000, 90);
 
 		for (int i = 0; i < 100; i++) {
 			p50.addValue(1000, i);
@@ -196,7 +196,7 @@ public class TimeSeriesTest {
 
 	@Test
 	public void testPercentileTimeBufferTooSmall() {
-		TimeSeries p80 = new PercentileTimeBuffer(1000, 80);
+		TimeSeries p80 = new PercentileTimeSeries(1000, 80);
 
 		p80.addValue(1000, 4);
 		p80.addValue(1000, 5);

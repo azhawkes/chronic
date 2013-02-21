@@ -7,12 +7,12 @@ import java.util.List;
 import org.apache.commons.math3.stat.descriptive.rank.Percentile;
 
 /**
- * Time buffer that calculates the nth percentile value at a given slot.
+ * Time series that calculates the nth percentile value at a given slot.
  */
-public class PercentileTimeBuffer extends AbstractTimeSeries {
+public class PercentileTimeSeries extends AbstractTimeSeries {
 	private Percentile percentile;
 
-	public PercentileTimeBuffer(long interval, int percentile) {
+	public PercentileTimeSeries(long interval, int percentile) {
 		super(interval);
 
 		this.percentile = new Percentile(percentile);

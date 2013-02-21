@@ -1,7 +1,7 @@
 package com.andyhawkes.chronic;
 
 /**
- * A time buffer that keeps only the highest value available in each slot. A max
+ * A time series that keeps only the highest value available in each slot. A max
  * function.
  */
 public class HighestValueTimeSeries extends AbstractTimeSeries {

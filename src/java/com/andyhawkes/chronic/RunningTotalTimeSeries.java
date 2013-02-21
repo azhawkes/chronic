@@ -1,8 +1,8 @@
 package com.andyhawkes.chronic;
 
 /**
- * Time buffer that keeps a running total. The value at any given slot is the
- * total of all slots up to and including that slot.
+ * Time series that maintains a running total. The value at any given slot is
+ * the total of all slots up to and including that slot.
  */
 public class RunningTotalTimeSeries extends AbstractTimeSeries {
 	public RunningTotalTimeSeries(long interval) {

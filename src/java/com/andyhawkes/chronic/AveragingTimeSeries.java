@@ -1,7 +1,7 @@
 package com.andyhawkes.chronic;
 
 /**
- * A time buffer that keeps averages of the values in each slot.
+ * A time series that keeps averages of the values in each slot.
  */
 public class AveragingTimeSeries extends AbstractTimeSeries {
 	public AveragingTimeSeries(long interval) {
