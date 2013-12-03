@@ -31,8 +31,11 @@ Supported Types of Time Series
 [AveragingTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/AveragingTimeSeries.java) - 
 Values are averaged by time slot.
 
-[HighestValueTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/HighestValueTimeSeries.java) - 
+[HighestValueTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/HighestValueTimeSeries.java) -
 The highest value for each time slot is returned; others are discarded.
+
+[LatestValueTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/LatestValueTimeSeries.java) -
+The most recently recorded value for each time slot is kept; others are discarded.
 
 [PercentileTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/PercentileTimeSeries.java) -
 Tracks the nth percentile of all values in the time slot.
@@ -46,4 +49,5 @@ grows. This is because running total calculations are expensive for long series.
 
 [CachingTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/CachingTimeSeries.java) -
 Wraps (decorates) another time series with a cached version, keeping a specified number of milliseconds mutable (uncached)
-at the end to accept new data. Note: this *should* reclaim memory from the underlying time series, but it doesn't do that yet.
+at the end to accept new data. If the underlying time series supports it, it will purge values earlier than the mutable
+window to save memory.

@@ -9,7 +9,7 @@ import org.apache.commons.math3.stat.descriptive.rank.Percentile;
 /**
  * Time series that calculates the nth percentile value at a given slot.
  */
-public class PercentileTimeSeries extends AbstractTimeSeries {
+public class PercentileTimeSeries extends PurgeableTimeSeries {
 	private Percentile percentile;
 
 	public PercentileTimeSeries(long interval, int percentile) {
@@ -29,14 +29,8 @@ public class PercentileTimeSeries extends AbstractTimeSeries {
 		slot.value = calculatePercentile(slot);
 	}
 
-	protected TimeBufferSlot getOrCreateSlotAtTime(long time) {
-		int index = getIndexAtTime(time);
-
-		while (index >= slots.size()) {
-			slots.add(new PercentileSlot());
-		}
-
-		return getSlotAtIndex(index);
+	protected TimeSlot createTimeSlot() {
+        return new PercentileSlot();
 	}
 
 	private double calculatePercentile(PercentileSlot slot) {
@@ -53,7 +47,7 @@ public class PercentileTimeSeries extends AbstractTimeSeries {
 		}
 	}
 
-	protected class PercentileSlot extends TimeBufferSlot {
-		protected List<Double> values = new ArrayList<Double>();
+	protected class PercentileSlot extends TimeSlot {
+		protected List<Double> values = new ArrayList<>();
 	}
 }

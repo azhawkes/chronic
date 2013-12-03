@@ -1,75 +1,40 @@
 package com.andyhawkes.chronic;
 
+import org.apache.log4j.Logger;
+
 /**
  * Time series that wraps and caches another one. It leaves a rolling period at
  * the end of the series that is "mutable" and not subject to caching.
  */
-public class CachingTimeSeries implements TimeSeries {
-	private TimeSeries cache;
-	private TimeSeries other;
+public class CachingTimeSeries extends LatestValueTimeSeries {
+    private static final Logger log = Logger.getLogger(CachingTimeSeries.class);
+
+    private PurgeableTimeSeries other;
 	private long mutablePeriod;
 
-	public CachingTimeSeries(TimeSeries other, long mutablePeriod) {
-		this.cache = new AveragingTimeSeries(other.getInterval());
+	public CachingTimeSeries(PurgeableTimeSeries other, long mutablePeriod) {
+        super(other.getInterval());
+
 		this.other = other;
 		this.mutablePeriod = mutablePeriod;
 	}
 
-	public void addValue(long time, double value) {
-		other.addValue(time, value);
+	public synchronized void addValue(long time, double value) {
+        if (time > other.getLatestTime() - mutablePeriod) {
+            other.addValue(time, value);
+            super.addValue(time, other.getValue(time));
+        } else {
+            log.debug("ignoring new value at time " + time + " because it's outside our mutable window of " + mutablePeriod + " ms");
+        }
 	}
 
-	public double getValue(long time) {
-		if (time < cache.getLatestTime()) {
-			return cache.getValue(time);
-		} else if (time > other.getLatestTime() - mutablePeriod) {
-			for (long t = other.getLatestTime(); t < other.getLatestTime() - mutablePeriod; t += cache.getInterval()) {
-				cache.addValue(t, other.getValue(t));
-			}
+	public synchronized double getValue(long time) {
+        if (time < other.getLatestTime() - mutablePeriod) {
+            other.purgeSlotAtIndex((int) (time / other.getInterval()));
 
-			return cache.getValue(time);
-		} else {
-			return other.getValue(time);
-		}
-	}
-
-	public double getMaxDelta(long period) {
-		return other.getMaxDelta(period);
-	}
-
-	public double getMinDelta(long period) {
-		return other.getMinDelta(period);
-	}
-
-	public double getSmartSlope(long endTime) {
-		if (endTime <= cache.getLatestTime()) {
-			return cache.getSmartSlope(endTime);
-		} else {
-			return other.getSmartSlope(endTime);
-		}
-	}
-
-	public double getDelta(long startTime, long endTime) {
-		return getValue(endTime) - getValue(startTime);
-	}
-
-	public double getMaxValue() {
-		return other.getMaxValue();
-	}
-
-	public double getMinValue() {
-		return other.getMinValue();
-	}
-
-	public long getEarliestTime() {
-		return other.getEarliestTime();
-	}
-
-	public long getLatestTime() {
-		return other.getLatestTime();
-	}
-
-	public long getInterval() {
-		return cache.getInterval();
+            return super.getValue(time);
+        } else {
+            return other.getValue(time);
+        }
 	}
 }

@@ -8,7 +8,7 @@ package com.andyhawkes.chronic;
  * 1/10th the resolution, to avoid traversing a whole bunch of buckets. This
  * backup, in turn, might have a low-res backup of itself, and so on.
  */
-public class OptimizedRunningTotalTimeSeries extends AbstractTimeSeries {
+public class OptimizedRunningTotalTimeSeries extends PurgeableTimeSeries {
 	private static final int RESOLUTION = 10;
 
 	private OptimizedRunningTotalTimeSeries lowRes;
@@ -21,7 +21,7 @@ public class OptimizedRunningTotalTimeSeries extends AbstractTimeSeries {
 	}
 
 	public synchronized void addValue(long time, double value) {
-		TimeBufferSlot slot = getOrCreateSlotAtTime(time);
+		TimeSlot slot = getOrCreateSlotAtTime(time);
 		int index = getIndexAtTime(time);
 
 		slot.value += value;
@@ -58,7 +58,7 @@ public class OptimizedRunningTotalTimeSeries extends AbstractTimeSeries {
 			total += lowRes.getValue(lowResTime);
 
 			for (int i = lowResIndex * RESOLUTION; i <= index; i++) {
-				TimeBufferSlot slot = getSlotAtIndex(i);
+				TimeSlot slot = getSlotAtIndex(i);
 
 				if (slot != null) {
 					total += getSlotAtIndex(i).value;
@@ -68,7 +68,7 @@ public class OptimizedRunningTotalTimeSeries extends AbstractTimeSeries {
 			}
 		} else {
 			for (int i = 0; i <= index; i++) {
-				TimeBufferSlot slot = getSlotAtIndex(i);
+				TimeSlot slot = getSlotAtIndex(i);
 
 				if (slot != null) {
 					total += getSlotAtIndex(i).value;
