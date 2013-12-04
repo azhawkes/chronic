@@ -7,7 +7,7 @@ import java.util.List;
  * A construct that keeps track of time-sensitive numeric data. Implementations
  * can perform various functions when gathering the data, such as returning the
  * average/max/min/etc.
- *
+ * <p/>
  * Creation and retrieval of time slots is thread-safe.
  */
 public abstract class PurgeableTimeSeries implements TimeSeries {
@@ -18,7 +18,9 @@ public abstract class PurgeableTimeSeries implements TimeSeries {
         this.interval = interval;
     }
 
-    public abstract void addValue(long time, double value);
+    public synchronized void addValue(long time, double value) {
+        getOrCreateSlotAtTime(time).addValue(value);
+    }
 
     public double getValue(long time) {
         long timeLatest = getLatestTime();
@@ -40,7 +42,7 @@ public abstract class PurgeableTimeSeries implements TimeSeries {
         if (slot == null) {
             return Double.NaN;
         } else {
-            return slot.value;
+            return slot.getValue();
         }
     }
 
@@ -219,12 +221,5 @@ public abstract class PurgeableTimeSeries implements TimeSeries {
         }
     }
 
-    protected TimeSlot createTimeSlot() {
-        return new TimeSlot();
-    }
-
-    protected class TimeSlot {
-        protected double value;
-        protected int weight;
-    }
+    protected abstract TimeSlot createTimeSlot();
 }

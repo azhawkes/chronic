@@ -9,24 +9,15 @@ public class RunningTotalTimeSeries extends PurgeableTimeSeries {
 		super(interval);
 	}
 
-	public void addValue(long time, double value) {
-		TimeSlot slot = getOrCreateSlotAtTime(time);
-
-		slot.value += value;
-		slot.weight++;
-	}
-
 	public double getValue(long time) {
 		double total = 0.0;
 		int index = getIndexAtTime(time);
 
-		// TODO - optimize with some kind of waypoints to avoid scanning every
-		// slot every time
 		for (int i = 0; i <= index; i++) {
 			TimeSlot slot = getSlotAtIndex(i);
 
 			if (slot != null) {
-				total += getSlotAtIndex(i).value;
+				total += getSlotAtIndex(i).getValue();
 			} else {
 				break;
 			}
@@ -34,4 +25,18 @@ public class RunningTotalTimeSeries extends PurgeableTimeSeries {
 
 		return total;
 	}
+
+    protected TimeSlot createTimeSlot() {
+        return new TimeSlot() {
+            private double value = 0.0;
+
+            public void addValue(double value) {
+                this.value += value;
+            }
+
+            public double getValue() {
+                return value;
+            }
+        };
+    }
 }

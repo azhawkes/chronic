@@ -18,36 +18,28 @@ public class PercentileTimeSeries extends PurgeableTimeSeries {
 		this.percentile = new Percentile(percentile);
 	}
 
-	public synchronized void addValue(long time, double value) {
-		PercentileSlot slot = (PercentileSlot) getOrCreateSlotAtTime(time);
-
-		slot.weight++;
-		slot.values.add(value);
-
-		Collections.sort(slot.values);
-
-		slot.value = calculatePercentile(slot);
-	}
-
 	protected TimeSlot createTimeSlot() {
-        return new PercentileSlot();
-	}
+        return new TimeSlot() {
+            protected List<Double> values = new ArrayList<>();
+            private double value = 0.0;
 
-	private double calculatePercentile(PercentileSlot slot) {
-		if (slot.weight == 0) {
-			return 0.00;
-		} else {
-			double[] values = new double[slot.values.size()];
+            public void addValue(double value) {
+                values.add(value);
 
-			for (int i = 0; i < slot.values.size(); i++) {
-				values[i] = slot.values.get(i);
-			}
+                Collections.sort(values);
 
-			return percentile.evaluate(values);
-		}
-	}
+                double[] vals = new double[values.size()];
 
-	protected class PercentileSlot extends TimeSlot {
-		protected List<Double> values = new ArrayList<>();
+                for (int i = 0; i < values.size(); i++) {
+                    vals[i] = values.get(i);
+                }
+
+                this.value = percentile.evaluate(vals);
+            }
+
+            public double getValue() {
+                return value;
+            }
+        };
 	}
 }

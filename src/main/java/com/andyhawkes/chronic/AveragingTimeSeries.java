@@ -8,11 +8,23 @@ public class AveragingTimeSeries extends PurgeableTimeSeries {
 		super(interval);
 	}
 
-	public synchronized void addValue(long time, double value) {
-		TimeSlot slot = getOrCreateSlotAtTime(time);
-		double average = ((slot.value * slot.weight) + value) / (slot.weight + 1);
+    protected TimeSlot createTimeSlot() {
+        return new TimeSlot() {
+            private int weight = 0;
+            private double value = 0.00;
 
-		slot.value = average;
-		slot.weight++;
-	}
+            public void addValue(double value) {
+                double average = ((this.value * this.weight) + value) / (this.weight + 1);
+
+                this.value = average;
+                this.weight++;
+            }
+
+            public double getValue() {
+                return value;
+            }
+        };
+    }
 }
+
+

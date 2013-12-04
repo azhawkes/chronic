@@ -24,8 +24,7 @@ public class OptimizedRunningTotalTimeSeries extends PurgeableTimeSeries {
 		TimeSlot slot = getOrCreateSlotAtTime(time);
 		int index = getIndexAtTime(time);
 
-		slot.value += value;
-		slot.weight++;
+        slot.addValue(value);
 
 		// If we've exceeded the resolution, create a low res buffer.
 		if (index >= RESOLUTION && lowRes == null) {
@@ -35,7 +34,7 @@ public class OptimizedRunningTotalTimeSeries extends PurgeableTimeSeries {
 				slot = getSlotAtIndex(i);
 
 				if (slot != null) {
-					lowRes.addValue(i * interval, slot.value);
+					lowRes.addValue(i * interval, slot.getValue());
 				}
 			}
 		}
@@ -61,7 +60,7 @@ public class OptimizedRunningTotalTimeSeries extends PurgeableTimeSeries {
 				TimeSlot slot = getSlotAtIndex(i);
 
 				if (slot != null) {
-					total += getSlotAtIndex(i).value;
+					total += getSlotAtIndex(i).getValue();
 				} else {
 					break;
 				}
@@ -71,7 +70,7 @@ public class OptimizedRunningTotalTimeSeries extends PurgeableTimeSeries {
 				TimeSlot slot = getSlotAtIndex(i);
 
 				if (slot != null) {
-					total += getSlotAtIndex(i).value;
+					total += getSlotAtIndex(i).getValue();
 				} else {
 					break;
 				}
@@ -92,4 +91,18 @@ public class OptimizedRunningTotalTimeSeries extends PurgeableTimeSeries {
 
 		return getValue(earliest);
 	}
+
+    protected TimeSlot createTimeSlot() {
+        return new TimeSlot() {
+            private double value = 0.0;
+
+            public void addValue(double value) {
+                this.value += value;
+            }
+
+            public double getValue() {
+                return value;
+            }
+        };
+    }
 }

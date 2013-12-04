@@ -1,18 +1,24 @@
 package com.andyhawkes.chronic;
 
 /**
- * A time series that keeps only the highest value available in each slot. A max
- * function.
+ * A time series that keeps only the highest value seen for each slot (a max function).
  */
 public class HighestValueTimeSeries extends PurgeableTimeSeries {
 	public HighestValueTimeSeries(long interval) {
 		super(interval);
 	}
 
-	public void addValue(long time, double value) {
-		TimeSlot slot = getOrCreateSlotAtTime(time);
+    protected TimeSlot createTimeSlot() {
+        return new TimeSlot() {
+            private double value = 0.0;
 
-		slot.value = Math.max(slot.value, value);
-		slot.weight++;
-	}
+            public void addValue(double value) {
+                this.value = Math.max(this.value, value);
+            }
+
+            public double getValue() {
+                return value;
+            }
+        };
+    }
 }

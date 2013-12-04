@@ -8,10 +8,17 @@ public class LatestValueTimeSeries extends PurgeableTimeSeries {
 		super(interval);
 	}
 
-	public void addValue(long time, double value) {
-		TimeSlot slot = getOrCreateSlotAtTime(time);
+    protected TimeSlot createTimeSlot() {
+        return new TimeSlot() {
+            private double value = 0.00;
 
-		slot.value = value;
-		slot.weight = 1;
-	}
+            public void addValue(double value) {
+                this.value = value;
+            }
+
+            public double getValue() {
+                return value;
+            }
+        };
+    }
 }
