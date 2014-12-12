@@ -1,6 +1,7 @@
 *.class
 
 .idea
+.gradle
 target
 build
 
