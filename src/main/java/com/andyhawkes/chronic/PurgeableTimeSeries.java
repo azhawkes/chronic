@@ -157,7 +157,11 @@ public abstract class PurgeableTimeSeries implements TimeSeries {
             samples++;
         }
 
-        return total.divide(new BigDecimal(samples), BigDecimal.ROUND_HALF_EVEN).doubleValue();
+        if (samples == 0) {
+            return Double.NaN;
+        } else {
+            return total.divide(new BigDecimal(samples), BigDecimal.ROUND_HALF_EVEN).doubleValue();
+        }
     }
 
     public double getMinValue() {
