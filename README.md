@@ -29,7 +29,10 @@ Supported Types of Time Series
 ------------------------------
 
 [AveragingTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/AveragingTimeSeries.java) - 
-Values are averaged by time slot.
+Values are averaged by time slot, with aggregates being the aggregate of all time slot values.
+
+[WeightedAveragingTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/WeightedAveragingTimeSeries.java) - 
+Values are averaged by time slot, but the aggregates (min/avg/max) are derived from all values instead of just being an aggregate of the time slots.
 
 [HighestValueTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/HighestValueTimeSeries.java) -
 The highest value for each time slot is returned; others are discarded.
