@@ -1,5 +1,6 @@
 package com.andyhawkes.chronic;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -140,6 +141,25 @@ public abstract class PurgeableTimeSeries implements TimeSeries {
         }
 
         return max;
+    }
+
+    public double getAvgValue() {
+        if (getEarliestTime() == getLatestTime()) {
+            return 0.0;
+        }
+
+        BigDecimal total = new BigDecimal(0);
+        long samples = 0;
+        long endTime = getLatestTime();
+
+        for (long t = 0; t <= endTime; t += interval) {
+            total = total.add(new BigDecimal(getValue(t)));
+            samples++;
+        }
+
+        System.out.println("total=" + total + ", samples=" + samples);
+
+        return total.divide(new BigDecimal(samples), BigDecimal.ROUND_HALF_EVEN).doubleValue();
     }
 
     public double getMinValue() {

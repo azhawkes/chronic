@@ -43,6 +43,8 @@ public interface TimeSeries {
 
 	public double getMaxValue();
 
+	public double getAvgValue();
+
 	public double getMinValue();
 
 	public long getEarliestTime();
