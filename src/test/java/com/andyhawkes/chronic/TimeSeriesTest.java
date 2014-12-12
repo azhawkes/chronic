@@ -71,6 +71,33 @@ public class TimeSeriesTest {
 	}
 
 	@Test
+	public void testWeightedAveragingTimeSeries() {
+		TimeSeries series = new WeightedAveragingTimeSeries(4000);
+
+		series.addValue(13, 3.7);
+		series.addValue(1280, 7.4);
+		series.addValue(1332, 0.6);
+		series.addValue(2640, 2.5);
+		series.addValue(3000, 3.7);
+		series.addValue(3955, 6.4);
+		series.addValue(4823, 3.2);
+		series.addValue(5505, 3.5);
+		series.addValue(5999, 2.6);
+		series.addValue(9811, 6.8);
+
+		Assert.assertEquals(series.getValue(0), 4.05, 0.0001);
+		Assert.assertEquals(series.getValue(3000), 4.05, 0.0001);
+		Assert.assertEquals(series.getValue(3999), 4.05, 0.0001);
+		Assert.assertEquals(series.getValue(4000), 3.1, 0.0001);
+		Assert.assertEquals(series.getValue(7999), 3.1, 0.0001);
+		Assert.assertEquals(series.getValue(10000), 6.8, 0.0001);
+
+		Assert.assertEquals(0.6, series.getMinValue(), 0.0001);
+		Assert.assertEquals(4.04, series.getAvgValue(), 0.0001);
+		Assert.assertEquals(7.4, series.getMaxValue(), 0.0001);
+	}
+
+	@Test
 	public void testRunningTotalTimeSeries() {
 		TimeSeries series = new RunningTotalTimeSeries(700);
 
