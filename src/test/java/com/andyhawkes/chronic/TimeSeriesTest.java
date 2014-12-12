@@ -37,10 +37,13 @@ public class TimeSeriesTest {
 		assertTrue(series.getValue(5999) == 6.4);
 		assertTrue(series.getValue(6000) == 0.0);
 		assertTrue(series.getValue(10000) == 6.8);
+		assertTrue(Double.isNaN(series.getValue(13000)));
 
 		Assert.assertEquals(0.0, series.getMinValue(), 0.0001);
 		Assert.assertEquals((7.4 + 6.4 + 0.0 + 6.8) / 4, series.getAvgValue(), 0.0001);
 		Assert.assertEquals(7.4, series.getMaxValue(), 0.0001);
+
+		Assert.assertEquals(11999, series.getLatestTime());
 	}
 
 	@Test
@@ -64,10 +67,13 @@ public class TimeSeriesTest {
 		Assert.assertEquals(series.getValue(4000), 3.1, 0.0001);
 		Assert.assertEquals(series.getValue(7999), 3.1, 0.0001);
 		Assert.assertEquals(series.getValue(10000), 6.8, 0.0001);
+		Assert.assertTrue(Double.isNaN(series.getValue(13000)));
 
 		Assert.assertEquals(3.1, series.getMinValue(), 0.0001);
 		Assert.assertEquals((4.05 + 3.1 + 6.8) / 3, series.getAvgValue(), 0.0001);
 		Assert.assertEquals(6.8, series.getMaxValue(), 0.0001);
+
+		Assert.assertEquals(11999, series.getLatestTime());
 	}
 
 	@Test
@@ -91,10 +97,13 @@ public class TimeSeriesTest {
 		Assert.assertEquals(series.getValue(4000), 3.1, 0.0001);
 		Assert.assertEquals(series.getValue(7999), 3.1, 0.0001);
 		Assert.assertEquals(series.getValue(10000), 6.8, 0.0001);
+		Assert.assertTrue(Double.isNaN(series.getValue(13000)));
 
 		Assert.assertEquals(0.6, series.getMinValue(), 0.0001);
 		Assert.assertEquals(4.04, series.getAvgValue(), 0.0001);
 		Assert.assertEquals(7.4, series.getMaxValue(), 0.0001);
+
+		Assert.assertEquals(11999, series.getLatestTime());
 	}
 
 	@Test
@@ -118,11 +127,13 @@ public class TimeSeriesTest {
 		Assert.assertEquals(series.getValue(2790), 14.2, 0.0001);
 		Assert.assertEquals(series.getValue(10000), 40.4, 0.0001);
 		Assert.assertEquals(series.getValue(30000), 40.4, 0.0001);
-		Assert.assertEquals(series.getValue(73000), 50.4, 0.0001);
+		Assert.assertTrue(Double.isNaN(series.getValue(74000)));
 
 		Assert.assertEquals(3.7, series.getMinValue(), 0.0001);
-		Assert.assertEquals(38.47619, series.getAvgValue(), 0.0001);
+		Assert.assertEquals(38.36154, series.getAvgValue(), 0.0001);
 		Assert.assertEquals(50.4, series.getMaxValue(), 0.0001);
+
+		Assert.assertEquals(72799, series.getLatestTime());
 	}
 
 	@Test
@@ -146,15 +157,17 @@ public class TimeSeriesTest {
 		Assert.assertEquals(series.getValue(2790), 14.2, 0.0001);
 		Assert.assertEquals(series.getValue(10000), 40.4, 0.0001);
 		Assert.assertEquals(series.getValue(30000), 40.4, 0.0001);
-		Assert.assertEquals(series.getValue(74000), 50.4, 0.0001);
+		Assert.assertTrue(Double.isNaN(series.getValue(74000)));
 
 		Assert.assertEquals(3.7, series.getMinValue(), 0.0001);
-		Assert.assertEquals(38.5886, series.getAvgValue(), 0.0001); // TODO - BigDecimal vs double arithmetic is different
+		Assert.assertEquals(38.36154, series.getAvgValue(), 0.0001);
 		Assert.assertEquals(50.4, series.getMaxValue(), 0.0001);
+
+		Assert.assertEquals(72799, series.getLatestTime());
 	}
 
     @Test
-    public void testBothTotalTimeSeriess() {
+    public void testBothTotalTimeSeries() {
         TimeSeries b1 = new RunningTotalTimeSeries(739);
         TimeSeries b2 = new OptimizedRunningTotalTimeSeries(739);
 

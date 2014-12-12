@@ -13,11 +13,15 @@ public class RunningTotalTimeSeries extends PurgeableTimeSeries {
 		double total = 0.0;
 		int index = getIndexAtTime(time);
 
+		if (index >= slots.size()) {
+			return Double.NaN;
+		}
+
 		for (int i = 0; i <= index; i++) {
 			TimeSlot slot = getSlotAtIndex(i);
 
 			if (slot != null) {
-				total += getSlotAtIndex(i).getValue();
+				total += slot.getValue();
 			} else {
 				break;
 			}

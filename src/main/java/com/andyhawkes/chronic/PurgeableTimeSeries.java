@@ -157,8 +157,6 @@ public abstract class PurgeableTimeSeries implements TimeSeries {
             samples++;
         }
 
-        System.out.println("total=" + total + ", samples=" + samples);
-
         return total.divide(new BigDecimal(samples), BigDecimal.ROUND_HALF_EVEN).doubleValue();
     }
 
@@ -203,6 +201,14 @@ public abstract class PurgeableTimeSeries implements TimeSeries {
 
     protected TimeSlot getSlotAtIndex(int index) {
         if (index >= slots.size()) {
+            return null;
+        }
+
+        return slots.get(index);
+    }
+
+    protected TimeSlot getOrCreateSlotAtIndex(int index) {
+        if (index >= slots.size()) {
             synchronized (this) {
                 while (index >= slots.size()) {
                     slots.add(createTimeSlot());
@@ -230,7 +236,7 @@ public abstract class PurgeableTimeSeries implements TimeSeries {
     }
 
     protected TimeSlot getOrCreateSlotAtTime(long time) {
-        return getSlotAtIndex(getIndexAtTime(time));
+        return getOrCreateSlotAtIndex(getIndexAtTime(time));
     }
 
     protected void purgeSlotAtIndex(int index) {
