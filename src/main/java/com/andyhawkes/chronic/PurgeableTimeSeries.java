@@ -153,7 +153,12 @@ public abstract class PurgeableTimeSeries implements TimeSeries {
         long endTime = getLatestTime();
 
         for (long t = 0; t <= endTime; t += interval) {
-            total = total.add(new BigDecimal(getValue(t)));
+            double value = getValue(t);
+
+            if (!Double.isNaN(value) && !Double.isInfinite(value)) {
+                total = total.add(new BigDecimal(getValue(t)));
+            }
+
             samples++;
         }
 
