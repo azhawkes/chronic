@@ -52,8 +52,10 @@ public class OptimizedRunningTotalTimeSeries extends PurgeableTimeSeries {
 		double total = 0.0;
 		int index = getIndexAtTime(time);
 
-		if (index >= slots.size()) {
+		if (slots.size() == 0) {
 			return Double.NaN;
+		} else if (time > getLatestTime()) {
+			return getValue(getLatestTime());
 		}
 
 		// If the low res buffer exists, use it as a waypoint.

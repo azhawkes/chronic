@@ -127,7 +127,8 @@ public class TimeSeriesTest {
 		Assert.assertEquals(series.getValue(2790), 14.2, 0.0001);
 		Assert.assertEquals(series.getValue(10000), 40.4, 0.0001);
 		Assert.assertEquals(series.getValue(30000), 40.4, 0.0001);
-		Assert.assertTrue(Double.isNaN(series.getValue(74000)));
+		Assert.assertEquals(series.getValue(72300), 50.4, 0.0001);
+		Assert.assertEquals(series.getValue(100000), 50.4, 0.0001);
 
 		Assert.assertEquals(3.7, series.getMinValue(), 0.0001);
 		Assert.assertEquals(38.36154, series.getAvgValue(), 0.0001);
@@ -157,7 +158,8 @@ public class TimeSeriesTest {
 		Assert.assertEquals(series.getValue(2790), 14.2, 0.0001);
 		Assert.assertEquals(series.getValue(10000), 40.4, 0.0001);
 		Assert.assertEquals(series.getValue(30000), 40.4, 0.0001);
-		Assert.assertTrue(Double.isNaN(series.getValue(74000)));
+		Assert.assertEquals(series.getValue(72300), 50.400, 0.0001);
+		Assert.assertEquals(series.getValue(100000), 50.400, 0.0001);
 
 		Assert.assertEquals(3.7, series.getMinValue(), 0.0001);
 		Assert.assertEquals(38.36154, series.getAvgValue(), 0.0001);
