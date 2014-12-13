@@ -1,5 +1,7 @@
 *.class
 
+*.iml
+*.ipr
 .idea
 .gradle
 target
