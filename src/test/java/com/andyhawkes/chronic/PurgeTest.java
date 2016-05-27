@@ -15,7 +15,7 @@ public class PurgeTest {
 
         series.purgeSlotAtIndex(6);
 
-        Assert.assertEquals("Average at 20000 should be 0", 0, series.getValue(20000), 0.00001);
+        Assert.assertEquals("Average at 20000 should be NaN", Double.NaN, series.getValue(20000), 0.00001);
 
         series.addValue(20000, 9);
 

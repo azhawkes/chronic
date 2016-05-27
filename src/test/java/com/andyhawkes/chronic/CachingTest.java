@@ -27,7 +27,7 @@ public class CachingTest {
 
         Assert.assertEquals("50th percentile at 140000 should be 7", 7, cachingTimeSeries.getValue(140000), 0.0001);
         Assert.assertEquals("50th percentile at 40000 should still be 5", 5, cachingTimeSeries.getValue(40000), 0.0001);
-        Assert.assertEquals("50th percentile at 180000 should be 0", 0, cachingTimeSeries.getValue(180000), 0.0001);
+        Assert.assertEquals("50th percentile at 180000 should be NaN", Double.NaN, cachingTimeSeries.getValue(180000), 0.0001);
 
         Assert.assertTrue("Values should be the same at 140000", cachingTimeSeries.getValue(140000) == percentileTimeSeries.getValue(140000));
         Assert.assertTrue("Values should not be the same at 40000 because the underlying series was purged", cachingTimeSeries.getValue(40000) != percentileTimeSeries.getValue(40000));

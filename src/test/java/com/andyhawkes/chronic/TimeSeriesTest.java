@@ -48,7 +48,7 @@ public class TimeSeriesTest {
 
 	@Test
 	public void testAveragingTimeSeries() {
-		TimeSeries series = new AveragingTimeSeries(4000);
+		AveragingTimeSeries series = new AveragingTimeSeries(4000);
 
 		series.addValue(13, 3.7);
 		series.addValue(1280, 7.4);
@@ -68,6 +68,11 @@ public class TimeSeriesTest {
 		Assert.assertEquals(series.getValue(7999), 3.1, 0.0001);
 		Assert.assertEquals(series.getValue(10000), 6.8, 0.0001);
 		Assert.assertTrue(Double.isNaN(series.getValue(13000)));
+
+		Assert.assertEquals(6, series.getWeight(1000));
+		Assert.assertEquals(3, series.getWeight(6000));
+		Assert.assertEquals(1, series.getWeight(9000));
+		Assert.assertEquals(0, series.getWeight(13000));
 
 		Assert.assertEquals(3.1, series.getMinValue(), 0.0001);
 		Assert.assertEquals((4.05 + 3.1 + 6.8) / 3, series.getAvgValue(), 0.0001);
@@ -78,7 +83,7 @@ public class TimeSeriesTest {
 
 	@Test
 	public void testWeightedAveragingTimeSeries() {
-		TimeSeries series = new WeightedAveragingTimeSeries(4000);
+		WeightedAveragingTimeSeries series = new WeightedAveragingTimeSeries(4000);
 
 		series.addValue(13, 3.7);
 		series.addValue(1280, 7.4);
@@ -99,11 +104,29 @@ public class TimeSeriesTest {
 		Assert.assertEquals(series.getValue(10000), 6.8, 0.0001);
 		Assert.assertTrue(Double.isNaN(series.getValue(13000)));
 
+		Assert.assertEquals(6, series.getWeight(1000));
+		Assert.assertEquals(3, series.getWeight(5000));
+		Assert.assertEquals(1, series.getWeight(9000));
+		Assert.assertEquals(0, series.getWeight(13000));
+
 		Assert.assertEquals(0.6, series.getMinValue(), 0.0001);
 		Assert.assertEquals(4.04, series.getAvgValue(), 0.0001);
 		Assert.assertEquals(7.4, series.getMaxValue(), 0.0001);
 
 		Assert.assertEquals(11999, series.getLatestTime());
+	}
+
+	@Test
+	public void testWeightedAveragingTimeSeriesLotsOfData() {
+		TimeSeries series = new WeightedAveragingTimeSeries(4000);
+
+		for (long t = 0; t < 6 * 3600000; t += 15000) {
+			series.addValue(t, 0.372);
+		}
+
+		Assert.assertEquals(0.372, series.getMinValue(), 0.0001);
+		Assert.assertEquals(0.372, series.getAvgValue(), 0.0001);
+		Assert.assertEquals(0.372, series.getMaxValue(), 0.0001);
 	}
 
 	@Test
