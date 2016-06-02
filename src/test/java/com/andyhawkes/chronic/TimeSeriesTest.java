@@ -47,6 +47,35 @@ public class TimeSeriesTest {
 	}
 
 	@Test
+	public void testSummingTimeSeries() {
+		TimeSeries series = new SummingTimeSeries(3000);
+
+		series.addValue(13, 3.7);
+		series.addValue(1280, 7.4);
+		series.addValue(1332, 0.6);
+		series.addValue(2640, 2.5);
+		series.addValue(3000, 3.7);
+		series.addValue(3955, 6.4);
+		series.addValue(4823, 3.2);
+		series.addValue(5505, 3.5);
+		series.addValue(5999, 2.5);
+		series.addValue(9811, 6.8);
+
+        Assert.assertEquals(series.getValue(2999), 14.2, 0.001);
+        Assert.assertEquals(series.getValue(3000), 19.3, 0.001);
+		Assert.assertEquals(series.getValue(5999), 19.3, 0.001);
+		Assert.assertEquals(series.getValue(6000), 0.0, 0.001);
+		Assert.assertEquals(series.getValue(10000), 6.8, 0.001);
+		Assert.assertTrue(Double.isNaN(series.getValue(13000)));
+
+		Assert.assertEquals(0.0, series.getMinValue(), 0.0001);
+		Assert.assertEquals((14.2 + 19.3 + 0.0 + 6.8) / 4, series.getAvgValue(), 0.0001);
+		Assert.assertEquals(19.3, series.getMaxValue(), 0.0001);
+
+		Assert.assertEquals(11999, series.getLatestTime());
+	}
+
+	@Test
 	public void testAveragingTimeSeries() {
 		AveragingTimeSeries series = new AveragingTimeSeries(4000);
 
