@@ -2,116 +2,85 @@ package com.andyhawkes.chronic;
 
 /**
  * Time series that keeps a running total. The value at any given slot is the
- * total of all slots up to and including that slot.
- * 
- * This one is optimized for large amounts of data. It keeps a backup series at
- * 1/10th the resolution, to avoid traversing a whole bunch of buckets. This
- * backup, in turn, might have a low-res backup of itself, and so on.
+ * total of all slots up to and including that slot. Furthermore, this time series is optimized so that slots will be
+ * combined (and the number of slots halved) if the total number of slots reaches a specified threshold.
  */
-public class OptimizedRunningTotalTimeSeries extends PurgeableTimeSeries {
-	private static final int RESOLUTION = 10;
+public class OptimizedRunningTotalTimeSeries implements TimeSeries {
+    private RunningTotalTimeSeries series;
+    private int maxSlots;
 
-	private OptimizedRunningTotalTimeSeries lowRes;
-	private long interval = 0L;
-	private long latestTime = 0L;
+    public OptimizedRunningTotalTimeSeries(long interval, int maxSlots) {
+        this.series = new RunningTotalTimeSeries(interval);
+        this.maxSlots = maxSlots;
+    }
 
-	public OptimizedRunningTotalTimeSeries(long interval) {
-		super(interval);
+    @Override
+    public synchronized void addValue(long time, double value) {
+        series.addValue(time, value);
 
-		this.interval = interval;
-	}
+        if (series.slots.size() > maxSlots) {
+            RunningTotalTimeSeries rebalanced = new RunningTotalTimeSeries(series.interval * 2);
 
-	public synchronized void addValue(long time, double value) {
-		TimeSlot slot = getOrCreateSlotAtTime(time);
-		int index = getIndexAtTime(time);
-
-        slot.addValue(value);
-
-		// If we've exceeded the resolution, create a low res buffer.
-		if (index >= RESOLUTION && lowRes == null) {
-			lowRes = new OptimizedRunningTotalTimeSeries(interval * RESOLUTION);
-
-			for (int i = 0; i < index; i++) {
-				slot = getOrCreateSlotAtIndex(i);
-
-				if (slot != null) {
-					lowRes.addValue(i * interval, slot.getValue());
-				}
-			}
-		}
-
-		// Also add to the low res buffer if available.
-		if (lowRes != null) {
-			lowRes.addValue(time, value);
-		}
-
-		latestTime = Math.max(latestTime, time);
-	}
-
-	public synchronized double getValue(long time) {
-		double total = 0.0;
-		int index = getIndexAtTime(time);
-
-		if (slots.size() == 0) {
-			return Double.NaN;
-		} else if (time > getLatestTime()) {
-			return getValue(getLatestTime());
-		}
-
-		// If the low res buffer exists, use it as a waypoint.
-		if (lowRes != null && index / RESOLUTION > 0) {
-			int lowResIndex = index / RESOLUTION;
-			long lowResTime = (lowResIndex - 1) * RESOLUTION * interval;
-
-			total += lowRes.getValue(lowResTime);
-
-			for (int i = lowResIndex * RESOLUTION; i <= index; i++) {
-				TimeSlot slot = getOrCreateSlotAtIndex(i);
-
-				if (slot != null) {
-					total += getOrCreateSlotAtIndex(i).getValue();
-				} else {
-					break;
-				}
-			}
-		} else {
-			for (int i = 0; i <= index; i++) {
-				TimeSlot slot = getOrCreateSlotAtIndex(i);
-
-				if (slot != null) {
-					total += getOrCreateSlotAtIndex(i).getValue();
-				} else {
-					break;
-				}
-			}
-		}
-
-		return total;
-	}
-
-	public double getMaxValue() {
-		long latest = getLatestTime();
-
-		return getValue(latest);
-	}
-
-	public double getMinValue() {
-		long earliest = getEarliestTime();
-
-		return getValue(earliest);
-	}
-
-	protected TimeSlot createTimeSlot() {
-        return new TimeSlot() {
-            private double value = 0.0;
-
-            public void addValue(double value) {
-                this.value += value;
+            for (long t = series.getEarliestTime(); t <= series.getLatestTime(); t += series.interval) {
+               rebalanced.addValue(t, series.getSlotAtTime(t).getValue());
             }
 
-            public double getValue() {
-                return value;
-            }
-        };
+            series = rebalanced;
+        }
+    }
+
+    @Override
+    public double getValue(long l) {
+        return series.getValue(l);
+    }
+
+    @Override
+    public long getInterval() {
+        return series.getInterval();
+    }
+
+    @Override
+    public double getMaxDelta(long l) {
+        return series.getMaxDelta(l);
+    }
+
+    @Override
+    public double getMinDelta(long l) {
+        return series.getMinDelta(l);
+    }
+
+    @Override
+    public double getSmartSlope(long l) {
+        return series.getSmartSlope(l);
+    }
+
+    @Override
+    public double getDelta(long l, long l1) {
+        return series.getDelta(l, l1);
+    }
+
+    @Override
+    public double getMaxValue() {
+        return series.getMaxValue();
+    }
+
+    @Override
+    public double getAvgValue() {
+        return series.getAvgValue();
+    }
+
+    @Override
+    public double getMinValue() {
+        return series.getMinValue();
+    }
+
+    @Override
+    public long getEarliestTime() {
+        return series.getEarliestTime();
+    }
+
+    @Override
+    public long getLatestTime() {
+        return series.getLatestTime();
     }
 }

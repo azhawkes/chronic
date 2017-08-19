@@ -191,7 +191,7 @@ public class TimeSeriesTest {
 
 	@Test
 	public void testOptimizedRunningTotalTimeSeries() {
-		TimeSeries series = new OptimizedRunningTotalTimeSeries(700);
+		TimeSeries series = new OptimizedRunningTotalTimeSeries(700, 1000);
 
 		series.addValue(13, 3.7);
 		series.addValue(1280, 7.4);
@@ -223,7 +223,7 @@ public class TimeSeriesTest {
     @Test
     public void testBothTotalTimeSeries() {
         TimeSeries b1 = new RunningTotalTimeSeries(739);
-        TimeSeries b2 = new OptimizedRunningTotalTimeSeries(739);
+        TimeSeries b2 = new OptimizedRunningTotalTimeSeries(739, 1000);
 
         for (int i = 0; i < 4200; i++) {
             long time = Math.round(Math.random() * 42000000L);
