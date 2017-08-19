@@ -31,6 +31,9 @@ Supported Types of Time Series
 [AveragingTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/AveragingTimeSeries.java) - 
 Values are averaged by time slot, with aggregates being the aggregate of all time slot values.
 
+[OptimizedAveragingTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/OptimizedAveragingTimeSeries.java) - 
+Just like AveragingTimeSeries, but if it grows too large, slots will be merged (and the resolution will be decreased by half).
+
 [WeightedAveragingTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/WeightedAveragingTimeSeries.java) - 
 Values are averaged by time slot, but the aggregates (min/avg/max) are derived from all values instead of just being an aggregate of the time slots.
 
@@ -50,8 +53,7 @@ Tracks the nth percentile of all values in the time slot.
 Keeps a running total of all previous values, up to and including the current time slot value.
 
 [OptimizedRunningTotalTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/OptimizedRunningTotalTimeSeries.java) -
-Just like a RunningTotalTimeSeries, but this one automatically reduces granularity of the time slots as the duration
-grows. This is because running total calculations are expensive for long series.
+Just like a RunningTotalTimeSeries, but if it grows too large slots will be merged.
 
 [CachingTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/CachingTimeSeries.java) -
 Wraps (decorates) another time series with a cached version, keeping a specified number of milliseconds mutable (uncached)

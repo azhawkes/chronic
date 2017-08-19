@@ -14,7 +14,7 @@ public class RunningTotalPerformanceTest {
         long interval = 3000;
         long duration = 86400000l * 7; // 7 days
 
-        TimeSeries b2 = new OptimizedRunningTotalTimeSeries(interval);
+        TimeSeries b2 = new OptimizedRunningTotalTimeSeries(interval, 5);
 
         for (long time = 0; time < duration; time += interval) {
             b2.addValue(time, Math.random() * 18.0d);
