@@ -12,8 +12,8 @@ import java.util.List;
  * Creation and retrieval of time slots is thread-safe.
  */
 public abstract class PurgeableTimeSeries implements TimeSeries {
-    protected List<TimeSlot> slots = new ArrayList<>();
-    protected long interval;
+    List<TimeSlot> slots = new ArrayList<>();
+    long interval;
 
     public PurgeableTimeSeries(long interval) {
         this.interval = interval;

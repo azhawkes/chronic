@@ -37,6 +37,9 @@ Values are averaged by time slot, but the aggregates (min/avg/max) are derived f
 [HighestValueTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/HighestValueTimeSeries.java) -
 The highest value for each time slot is returned; others are discarded.
 
+[OptimizedHighestValueTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/OptimizedHighestValueTimeSeries.java) -
+Just like HighestValueTimeSeries, except that if it grows to have too many slots, adjacent slots will be merged.
+
 [LatestValueTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/LatestValueTimeSeries.java) -
 The most recently recorded value for each time slot is kept; others are discarded.
 
