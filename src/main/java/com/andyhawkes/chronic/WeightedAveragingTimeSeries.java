@@ -9,7 +9,7 @@ import java.math.RoundingMode;
 public class WeightedAveragingTimeSeries extends AveragingTimeSeries {
     private double minValue = Double.NaN;
     private double maxValue = Double.NaN;
-    private BigDecimal totalValue = new BigDecimal(0.0);
+    private BigDecimal totalValue = new BigDecimal(0.0).setScale(3, RoundingMode.HALF_EVEN);
     private long totalSamples = 0;
 
     public WeightedAveragingTimeSeries(long interval) {
