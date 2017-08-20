@@ -37,6 +37,9 @@ Just like AveragingTimeSeries, but if it grows too large, slots will be merged (
 [WeightedAveragingTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/WeightedAveragingTimeSeries.java) - 
 Values are averaged by time slot, but the aggregates (min/avg/max) are derived from all values instead of just being an aggregate of the time slots.
 
+[OptimizedWeightedAveragingTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/OptimizedWeightedAveragingTimeSeries.java) - 
+Like WeightedAveragingTimeSeries, values are averaged by time slot, but also supports merging if the number of slots grows too high.
+
 [HighestValueTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/HighestValueTimeSeries.java) -
 The highest value for each time slot is returned; others are discarded.
 
