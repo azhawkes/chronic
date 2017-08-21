@@ -18,7 +18,7 @@ public class OptimizedWeightedAveragingTimeSeries implements TimeSeries {
     public synchronized void addValue(long l, double v) {
         series.addValue(l, v);
 
-        if (series.slots.size() > maxSlots) {
+        while (series.getSlotCount() > maxSlots) {
             WeightedAveragingTimeSeries rebalanced = new WeightedAveragingTimeSeries(series.getInterval() * 2);
 
             for (long t = series.getEarliestTime(); t <= series.getLatestTime(); t += series.getInterval()) {
