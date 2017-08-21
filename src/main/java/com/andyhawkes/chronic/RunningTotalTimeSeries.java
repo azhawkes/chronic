@@ -33,16 +33,6 @@ public class RunningTotalTimeSeries extends PurgeableTimeSeries {
 	}
 
     protected TimeSlot createTimeSlot() {
-        return new TimeSlot() {
-            private double value = 0.0;
-
-            public void addValue(double value) {
-                this.value += value;
-            }
-
-            public double getValue() {
-                return value;
-            }
-        };
+        return new AdditiveTimeSlot();
     }
 }
