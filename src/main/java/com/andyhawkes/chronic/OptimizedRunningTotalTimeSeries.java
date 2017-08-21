@@ -18,10 +18,10 @@ public class OptimizedRunningTotalTimeSeries implements TimeSeries {
     public synchronized void addValue(long time, double value) {
         series.addValue(time, value);
 
-        if (series.slots.size() > maxSlots) {
-            RunningTotalTimeSeries rebalanced = new RunningTotalTimeSeries(series.interval * 2);
+        while (series.getSlotCount() > maxSlots) {
+            RunningTotalTimeSeries rebalanced = new RunningTotalTimeSeries(series.getInterval() * 2);
 
-            for (long t = series.getEarliestTime(); t <= series.getLatestTime(); t += series.interval) {
+            for (long t = series.getEarliestTime(); t <= series.getLatestTime(); t += series.getInterval()) {
                rebalanced.addValue(t, series.getSlotAtTime(t).getValue());
             }
 

@@ -12,8 +12,8 @@ import java.util.List;
  * Creation and retrieval of time slots is thread-safe.
  */
 public abstract class PurgeableTimeSeries implements TimeSeries {
-    List<TimeSlot> slots = new ArrayList<>();
-    long interval;
+    private List<TimeSlot> slots = new ArrayList<>();
+    private long interval;
 
     public PurgeableTimeSeries(long interval) {
         this.interval = interval;
@@ -41,7 +41,7 @@ public abstract class PurgeableTimeSeries implements TimeSeries {
         TimeSlot slot = getSlotAtTime(time);
 
         if (slot == null) {
-            return Double.NaN;
+            return Double.NaN; // TODO - I don't like this
         } else {
             return slot.getValue();
         }
@@ -67,7 +67,7 @@ public abstract class PurgeableTimeSeries implements TimeSeries {
             }
         }
 
-        return max;
+        return max == Double.MIN_VALUE ? 0 : max;
     }
 
     /**
@@ -90,11 +90,7 @@ public abstract class PurgeableTimeSeries implements TimeSeries {
             }
         }
 
-        if (min == Double.MAX_VALUE) {
-            min = 0;
-        }
-
-        return min;
+        return min == Double.MAX_VALUE ? 0 : min;
     }
 
     /**
@@ -140,7 +136,7 @@ public abstract class PurgeableTimeSeries implements TimeSeries {
             }
         }
 
-        return max;
+        return max == Double.MIN_VALUE ? 0 : max;
     }
 
     public double getAvgValue() {
@@ -163,7 +159,7 @@ public abstract class PurgeableTimeSeries implements TimeSeries {
         }
 
         if (samples == 0) {
-            return Double.NaN;
+            return 0;
         } else {
             return total.divide(new BigDecimal(samples), BigDecimal.ROUND_HALF_EVEN).doubleValue();
         }
@@ -185,11 +181,7 @@ public abstract class PurgeableTimeSeries implements TimeSeries {
             }
         }
 
-        if (min == Double.MAX_VALUE) {
-            min = 0;
-        }
-
-        return min;
+        return min == Double.MAX_VALUE ? 0 : min;
     }
 
     public long getEarliestTime() {
@@ -202,6 +194,10 @@ public abstract class PurgeableTimeSeries implements TimeSeries {
 
     public long getInterval() {
         return interval;
+    }
+
+    protected int getSlotCount() {
+        return slots.size();
     }
 
     protected int getIndexAtTime(long time) {

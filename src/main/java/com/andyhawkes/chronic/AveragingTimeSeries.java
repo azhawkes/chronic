@@ -12,34 +12,14 @@ public class AveragingTimeSeries extends PurgeableTimeSeries implements Weighted
         TimeSlot slot = getSlotAtTime(interval);
 
         if (slot != null) {
-            return ((WeightedSlot) slot).getWeight();
+            return ((WeightedTimeSlot) slot).getWeight();
         } else {
             return 0;
         }
     }
 
     protected TimeSlot createTimeSlot() {
-        return new WeightedSlot();
-    }
-
-    private class WeightedSlot implements TimeSlot {
-        private int weight = 0;
-        private double value = 0.00;
-
-        public void addValue(double value) {
-            double average = ((this.value * this.weight) + value) / (this.weight + 1);
-
-            this.value = average;
-            this.weight++;
-        }
-
-        public double getValue() {
-            return value;
-        }
-
-        public int getWeight() {
-            return weight;
-        }
+        return new WeightedTimeSlot();
     }
 }
 
