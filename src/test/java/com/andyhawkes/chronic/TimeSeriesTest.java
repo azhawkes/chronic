@@ -220,22 +220,6 @@ public class TimeSeriesTest {
 		Assert.assertEquals(72799, series.getLatestTime());
 	}
 
-    @Test
-    public void testBothTotalTimeSeries() {
-        TimeSeries b1 = new RunningTotalTimeSeries(739);
-        TimeSeries b2 = new OptimizedRunningTotalTimeSeries(739, 1000);
-
-        for (int i = 0; i < 4200; i++) {
-            long time = Math.round(Math.random() * 42000000L);
-            double value = Math.random() * 18.0d;
-
-            b1.addValue(time, value);
-            b2.addValue(time, value);
-
-            Assert.assertEquals("Optimized and regular total should be equal", b1.getValue(time), b2.getValue(time), 0.0001);
-        }
-    }
-
 	@Test
 	public void testSmartSlope() {
 		TimeSeries series = new HighestValueTimeSeries(1000);
