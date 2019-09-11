@@ -7,7 +7,7 @@ import org.junit.Test;
  * Tests the caching time series correctly wraps another time series and returns valid measurements.
  */
 public class CachingTest {
-    private PercentileTimeSeries percentileTimeSeries = new PercentileTimeSeries(3000, 50);
+    private PercentileTimeSeries percentileTimeSeries = new PercentileTimeSeries(3000);
     private CachingTimeSeries cachingTimeSeries = new CachingTimeSeries(percentileTimeSeries, 60000);
 
     @Test

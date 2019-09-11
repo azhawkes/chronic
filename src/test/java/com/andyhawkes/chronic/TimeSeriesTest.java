@@ -247,34 +247,30 @@ public class TimeSeriesTest {
 
 	@Test
 	public void testPercentileTimeSeries() {
-		TimeSeries p50 = new PercentileTimeSeries(1000, 50);
-		TimeSeries p80 = new PercentileTimeSeries(1000, 80);
-		TimeSeries p90 = new PercentileTimeSeries(1000, 90);
+	    PercentileTimeSeries series = new PercentileTimeSeries(1000);
 
 		for (int i = 0; i < 100; i++) {
-			p50.addValue(1000, i);
-			p80.addValue(1000, i);
-			p90.addValue(1000, i);
+		    series.addValue(1000, i);
 		}
 
-		Assert.assertEquals("50th percentile score should be 49.5", 49.5, p50.getValue(1000), .000001);
-		Assert.assertEquals("80th percentile score should be 79.8", 79.8, p80.getValue(1000), .000001);
-		Assert.assertEquals("90th percentile score should be 89.9", 89.9, p90.getValue(1000), .000001);
+		Assert.assertEquals("50th percentile score should be 49.5", 49.5, series.getValue(1000, 0.50), .000001);
+		Assert.assertEquals("80th percentile score should be 79.8", 79.8, series.getValue(1000, 0.80), .000001);
+		Assert.assertEquals("90th percentile score should be 89.9", 89.9, series.getValue(1000, 0.90), .000001);
 	}
 
 	@Test
 	public void testPercentileTimeSeriesTooSmall() {
-		TimeSeries p80 = new PercentileTimeSeries(1000, 80);
+		PercentileTimeSeries p80 = new PercentileTimeSeries(1000);
 
 		p80.addValue(1000, 4);
 		p80.addValue(1000, 5);
 		p80.addValue(1000, 6);
 
-		Assert.assertEquals("80th percentile should be 6", 6, p80.getValue(1000), .000001);
+		Assert.assertEquals("80th percentile should be 6", 6, p80.getValue(1000, .80), .000001);
 
 		p80.addValue(1000, 12);
 		p80.addValue(1000, 100);
 
-		Assert.assertEquals("80th percentile should be 82.4", 82.4, p80.getValue(1000), .000001);
+		Assert.assertEquals("80th percentile should be 82.4", 82.4, p80.getValue(1000, .80), .000001);
 	}
 }

@@ -14,7 +14,7 @@ public class ThreadSafetyTest {
     private static final int SLOTS = 10000;
     private static final int INTERVAL = 1000;
 
-    private PurgeableTimeSeries series = new PercentileTimeSeries(INTERVAL, 80);
+    private PurgeableTimeSeries series = new PercentileTimeSeries(INTERVAL);
     private long startTime = 0L;
 
     @Test

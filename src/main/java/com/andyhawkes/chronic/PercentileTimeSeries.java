@@ -1,45 +1,57 @@
 package com.andyhawkes.chronic;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.apache.commons.math3.stat.descriptive.rank.Percentile;
+
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Time series that calculates the nth percentile value at a given slot.
+ * By default, this is the 50th percentile (median), but you can ask for any quantile
+ * you want (between 0 and 1).
  */
 public class PercentileTimeSeries extends PurgeableTimeSeries {
-	private Percentile percentile;
+    public PercentileTimeSeries(long interval) {
+        super(interval);
+    }
 
-	public PercentileTimeSeries(long interval, int percentile) {
-		super(interval);
+    @Override
+    public double getValue(long time) {
+        return getValue(time, 0.50);
+    }
 
-		this.percentile = new Percentile(percentile);
-	}
+    public double getValue(long time, double quantile) {
+        PercentileTimeSlot slot = (PercentileTimeSlot) getOrCreateSlotAtTime(time);
 
-	protected TimeSlot createTimeSlot() {
-        return new TimeSlot() {
-            protected List<Double> values = new ArrayList<>();
-            private double value = 0.0;
+        if (slot != null && slot.values != null) {
+            return computePercentile(slot.values, quantile);
+        } else {
+            return 0;
+        }
+    }
 
-            public void addValue(double value) {
-                values.add(value);
+    protected TimeSlot createTimeSlot() {
+        return new PercentileTimeSlot();
+    }
 
-                Collections.sort(values);
+    private static double computePercentile(List<Double> values, double quantile) {
+        synchronized (values) {
+            double[] sorted = values.stream().mapToDouble(i -> i).sorted().toArray();
 
-                double[] vals = new double[values.size()];
+            return new Percentile(quantile * 100).evaluate(sorted);
+        }
+    }
 
-                for (int i = 0; i < values.size(); i++) {
-                    vals[i] = values.get(i);
-                }
+    public static class PercentileTimeSlot implements TimeSlot {
+        private List<Double> values = Collections.synchronizedList(new LinkedList<>());
 
-                this.value = percentile.evaluate(vals);
-            }
+        public void addValue(double value) {
+            values.add(value);
+        }
 
-            public double getValue() {
-                return value;
-            }
-        };
-	}
+        public double getValue() {
+            return computePercentile(values, 0.50);
+        }
+    }
 }
