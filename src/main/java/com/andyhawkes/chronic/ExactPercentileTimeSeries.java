@@ -11,8 +11,8 @@ import java.util.List;
  * By default, this is the 50th percentile (median), but you can ask for any quantile
  * you want (between 0 and 1).
  */
-public class PercentileTimeSeries extends PurgeableTimeSeries {
-    public PercentileTimeSeries(long interval) {
+public class ExactPercentileTimeSeries extends PurgeableTimeSeries implements PercentileTimeSeries {
+    public ExactPercentileTimeSeries(long interval) {
         super(interval);
     }
 

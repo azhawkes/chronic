@@ -247,7 +247,7 @@ public class TimeSeriesTest {
 
 	@Test
 	public void testPercentileTimeSeries() {
-		PercentileTimeSeries series = new PercentileTimeSeries(1000);
+		ExactPercentileTimeSeries series = new ExactPercentileTimeSeries(1000);
 
 		for (int i = 0; i < 100; i++) {
 			series.addValue(1000, i);
@@ -260,7 +260,7 @@ public class TimeSeriesTest {
 
 	@Test
 	public void testPercentileTimeSeriesTooSmall() {
-		PercentileTimeSeries series = new PercentileTimeSeries(1000);
+		ExactPercentileTimeSeries series = new ExactPercentileTimeSeries(1000);
 
 		series.addValue(1000, 4);
 		series.addValue(1000, 5);
