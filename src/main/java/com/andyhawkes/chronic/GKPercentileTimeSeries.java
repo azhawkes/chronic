@@ -7,21 +7,21 @@ import org.streaminer.stream.quantile.GKQuantiles;
  * Greenwald-Khanna algorithm. By default, it returns the 50th percentile (median),
  * but you can ask for any quantile you want (between 0 and 1).
  */
-public class EstimatingPercentileTimeSeries extends PurgeableTimeSeries implements PercentileTimeSeries {
+public class GKPercentileTimeSeries extends PurgeableTimeSeries implements PercentileTimeSeries {
     private double epsilon;
 
-    public EstimatingPercentileTimeSeries(long interval) {
+    public GKPercentileTimeSeries(long interval) {
         this(interval, 0.05);
     }
 
-    public EstimatingPercentileTimeSeries(long interval, double epsilon) {
+    public GKPercentileTimeSeries(long interval, double epsilon) {
         super(interval);
 
         this.epsilon = epsilon;
     }
 
     public double getValue(long time, double quantile) {
-        EstimatingPercentileTimeSlot slot = (EstimatingPercentileTimeSlot) getOrCreateSlotAtTime(time);
+        GKPercentileTimeSeriesSlot slot = (GKPercentileTimeSeriesSlot) getOrCreateSlotAtTime(time);
 
         if (slot != null) {
             return slot.getValue(quantile);
@@ -31,13 +31,13 @@ public class EstimatingPercentileTimeSeries extends PurgeableTimeSeries implemen
     }
 
     protected TimeSlot createTimeSlot() {
-        return new EstimatingPercentileTimeSlot(epsilon);
+        return new GKPercentileTimeSeriesSlot(epsilon);
     }
 
-    public static class EstimatingPercentileTimeSlot implements TimeSlot {
+    public static class GKPercentileTimeSeriesSlot implements TimeSlot {
         private GKQuantiles quantiles;
 
-        EstimatingPercentileTimeSlot (double epsilon) {
+        GKPercentileTimeSeriesSlot(double epsilon) {
             quantiles = new GKQuantiles();
             quantiles.setEpsilon(epsilon);
         }
