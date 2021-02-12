@@ -1,5 +1,5 @@
-Chronic: Speedy time series for Java
-====================================
+Chronic: Speedy time series for the JVM
+=======================================
 
 In Loadster, we needed to keep track of large amounts of time series data in memory and reference it quickly and 
 efficiently.
@@ -28,37 +28,37 @@ that slot), and the second time slot (from 3000-5999 milliseconds) contains 61.5
 Supported Types of Time Series
 ------------------------------
 
-[AveragingTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/AveragingTimeSeries.java) - 
+[AveragingTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/main/java/com/andyhawkes/chronic/AveragingTimeSeries.java) - 
 Values are averaged by time slot, with aggregates being the aggregate of all time slot values.
 
-[OptimizedAveragingTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/OptimizedAveragingTimeSeries.java) - 
+[OptimizedAveragingTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/main/java/com/andyhawkes/chronic/OptimizedAveragingTimeSeries.java) - 
 Just like AveragingTimeSeries, but if it grows too large, slots will be merged (and the resolution will be decreased by half).
 
-[WeightedAveragingTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/WeightedAveragingTimeSeries.java) - 
+[WeightedAveragingTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/main/java/com/andyhawkes/chronic/WeightedAveragingTimeSeries.java) - 
 Values are averaged by time slot, but the aggregates (min/avg/max) are derived from all values instead of just being an aggregate of the time slots.
 
-[OptimizedWeightedAveragingTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/OptimizedWeightedAveragingTimeSeries.java) - 
+[OptimizedWeightedAveragingTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/main/java/com/andyhawkes/chronic/OptimizedWeightedAveragingTimeSeries.java) - 
 Like WeightedAveragingTimeSeries, values are averaged by time slot, but also supports merging if the number of slots grows too high.
 
-[HighestValueTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/HighestValueTimeSeries.java) -
+[HighestValueTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/main/java/com/andyhawkes/chronic/HighestValueTimeSeries.java) -
 The highest value for each time slot is returned; others are discarded.
 
-[OptimizedHighestValueTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/OptimizedHighestValueTimeSeries.java) -
+[OptimizedHighestValueTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/main/java/com/andyhawkes/chronic/OptimizedHighestValueTimeSeries.java) -
 Just like HighestValueTimeSeries, except that if it grows to have too many slots, adjacent slots will be merged.
 
-[LatestValueTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/LatestValueTimeSeries.java) -
+[LatestValueTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/main/java/com/andyhawkes/chronic/LatestValueTimeSeries.java) -
 The most recently recorded value for each time slot is kept; others are discarded.
 
-[PercentileTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/PercentileTimeSeries.java) -
+[PercentileTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/main/java/com/andyhawkes/chronic/PercentileTimeSeries.java) -
 Tracks the nth percentile of all values in the time slot.
 
-[RunningTotalTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/RunningTotalTimeSeries.java) -
+[RunningTotalTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/main/java/com/andyhawkes/chronic/RunningTotalTimeSeries.java) -
 Keeps a running total of all previous values, up to and including the current time slot value.
 
-[OptimizedRunningTotalTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/OptimizedRunningTotalTimeSeries.java) -
+[OptimizedRunningTotalTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/main/java/com/andyhawkes/chronic/OptimizedRunningTotalTimeSeries.java) -
 Just like a RunningTotalTimeSeries, but if it grows too large slots will be merged.
 
-[CachingTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/java/com/andyhawkes/chronic/CachingTimeSeries.java) -
+[CachingTimeSeries](https://github.com/azhawkes/chronic/blob/master/src/main/java/com/andyhawkes/chronic/CachingTimeSeries.java) -
 Wraps (decorates) another time series with a cached version, keeping a specified number of milliseconds mutable (uncached)
 at the end to accept new data. If the underlying time series supports it, it will purge values earlier than the mutable
 window to save memory.
