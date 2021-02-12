@@ -30,6 +30,16 @@ public class GKPercentileTimeSeries extends PurgeableTimeSeries implements Perce
         }
     }
 
+    public int getWeight(long time) {
+        GKPercentileTimeSeriesSlot slot = (GKPercentileTimeSeriesSlot) getOrCreateSlotAtTime(time);
+
+        if (slot != null) {
+            return slot.quantiles.getCount();
+        } else {
+            return 0;
+        }
+    }
+
     protected TimeSlot createTimeSlot() {
         return new GKPercentileTimeSeriesSlot(epsilon);
     }

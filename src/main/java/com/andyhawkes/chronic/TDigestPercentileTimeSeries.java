@@ -31,6 +31,16 @@ public class TDigestPercentileTimeSeries extends PurgeableTimeSeries implements 
         }
     }
 
+    public int getWeight(long time) {
+        TDigestPercentileTimeSeriesSlot slot = (TDigestPercentileTimeSeriesSlot) getSlotAtTime(time);
+
+        if (slot != null) {
+            return (int) slot.digest.size();
+        } else {
+            return 0;
+        }
+    }
+
     protected TimeSlot createTimeSlot() {
         return new TDigestPercentileTimeSeriesSlot(compression);
     }

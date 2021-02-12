@@ -365,4 +365,20 @@ public class TimeSeriesTest {
 
 		Assert.assertEquals("80th percentile should be 56", 56, series.getValue(1000, .80), .000001);
 	}
+
+	@Test
+	public void testTDigestLotsOfStuffTightCompression() {
+		TDigestPercentileTimeSeries low = new TDigestPercentileTimeSeries(1000, 5);
+
+		// 86400 buckets, 1k items in each
+		for (long t = 0; t < 86400000L; t += 1000) {
+			for (int j = 0; j < 1000; j++) {
+			    double n = Math.random() * 1000;
+
+				low.addValue(t, n);
+			}
+
+			System.out.println(String.format("%d: %f %f %f %f %f", t, low.getValue(t, 0.99), low.getValue(t, 0.95), low.getValue(t, 0.9), low.getValue(t, 0.8), low.getValue(t, 0.5)));
+		}
+	}
 }

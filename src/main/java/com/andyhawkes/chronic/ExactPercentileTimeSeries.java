@@ -31,6 +31,16 @@ public class ExactPercentileTimeSeries extends PurgeableTimeSeries implements Pe
         }
     }
 
+    public int getWeight(long time) {
+        PercentileTimeSlot slot = (PercentileTimeSlot) getOrCreateSlotAtTime(time);
+
+        if (slot != null && slot.values != null) {
+            return slot.values.size();
+        } else {
+            return 0;
+        }
+    }
+
     protected TimeSlot createTimeSlot() {
         return new PercentileTimeSlot();
     }
